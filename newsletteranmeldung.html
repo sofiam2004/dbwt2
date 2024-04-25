@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .container {
+
+            width: 720px;
+            border-radius: 7px;
+            background-color: #FAFAFA;
+            padding: 20px;
+        }
+
+        button {
+            background-color: #4b4241;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #00a19c;
+
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Anmeldung</h1>
+<p></p>
+
+<div class="container">
+    <form ACTION="https://web.inxmail.com/[Mandantenname]/subscription/servlet" METHOD="post">
+        <input type="hidden" name="INXMAIL_SUBSCRIPTION" value="[Listenname]">
+        <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg">
+        <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]"/>
+        <input type="hidden" name="INXMAIL_CHARSET" value="UTF-8"/>
+        <label>E-Mail*
+            <input type="text" name="email">
+        </label>
+        <label>Anrede
+            <select name="Anrede">
+                <option value="male">Herr</option>
+                <option value="female">Frau</option>
+                <option value="neutral">Divers</option>
+            </select>
+        </label>
+        <label>Vorname
+            <input type="text" name="Vorname">
+        </label>
+        <label>Nachname
+            <input type="text" name="Nachname">
+        </label>
+        <label>Sprache Newsletter
+            <select name="Newsletter bitte in:">
+                <option value="Deutsch">Deutsch</option>
+                <option value="Englisch">Englisch</option>
+            </select>
+        </label>
+        <label>
+            <input type="checkbox" name="INXMAIL_TRACKINGPERMISSION">  Hiermit stimme ich den Datenschutzbestimmungen zu
+        </label>
+        <label>
+            <input type="submit" name="Submit" value="Newsletter Anmelden">
+        </label>
+    </form>
+</div>
+</body>
+</html>
