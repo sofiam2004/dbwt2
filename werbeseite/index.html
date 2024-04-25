@@ -4,44 +4,55 @@
     <meta charset="UTF-8">
     <title>Ihre E-Mensa</title>
     <style>
+        html {
+            box-sizing: border-box;
+        }
         body {
-            width: 1200px;
             display: block;
             margin: 0 auto;
+            width: 1200px;
             padding: 0;
             height: 100%;
             text-align: center;
+            font-family: 'Josefin Sans', sans-serif;
+            box-sizing: border-box;
         }
-        main {
-            display: block;
-        }
+
         h1 {
-            margin-top: 60px;
+            margin-top: 80px;
         }
+
         .container_nav {
-            display: flex;
-        }
-        nav ul {
+            height: 65px;
+            width: 1200px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding-top: 5px;
-            padding-left: 0;
-            padding-right: 0;
-            top: 0;
-            z-index: 1000;
+            justify-content: space-between;
+            padding: 0;
+            background-color: #f1dab4;
+            margin: 20px 0 50px 0;
+        }
+        .container_nav ul {
             list-style: none;
-            letter-spacing: 2px;
-            width: 600px;
-            border: 1px solid #ccc;
-            margin: auto;
+            display: flex;
+            padding: 0;
+
         }
-        nav ul li {
-            padding: 10px;
+        .container_nav ul li {
+            padding: 10px 30px;
         }
-        .container_nav img {
-            width: 200px;
-            margin-left: 20px;
+        .container_nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .container_nav ul li a:hover{
+            color: coral;
+        }
+        .logo {
+            font-size: 28px;
+            padding: 10px 30px;
         }
 
         p {
@@ -72,6 +83,11 @@
         .zahlen_liste li {
             padding: 20px;
         }
+        .container_kontakt {
+            width: 35%;
+            margin: auto;
+            text-align: left;
+        }
         #wichtig ul {
             display: flex;
             flex-direction: column;
@@ -80,7 +96,7 @@
             width: 300px;
         }
         #wichtig ul li {
-            width: 290px;
+            width: 320px;
             margin-left: 10px;
             text-align: left;
         }
@@ -96,14 +112,7 @@
             resize: vertical;
         }
 
-        .container {
-            margin: auto;
-            width: 400px;
-            border-radius: 7px;
-            background-color: #FAFAFA;
-            padding: 20px;
-            text-align: left;
-        }
+
 
         button {
             background-color: #4b4241;
@@ -145,13 +154,14 @@
             text-decoration: underline;
         }
 
+
     </style>
 </head>
 <body>
 <header>
     <div class="container_nav">
-        <img src="platzhalter-img-3.jpg" alt="Logo" title="Logo">
-    <nav>
+        <h2 class="logo">E-Mensa</h2>
+
         <ul>
             <li><a href="#ankündigung">Ankündigung</a></li>
             <li><a href="#speisen">Speisen</a></li>
@@ -159,7 +169,6 @@
             <li><a href="#kontakt">Kontakt</a></li>
             <li><a href="#wichtig">Wichtig für uns</a></li>
         </ul>
-    </nav>
     </div>
 </header>
 <main>
@@ -212,8 +221,8 @@
     </div>
     <div id="kontakt">
     <h1>Interesse geweckt? Wir informieren Sie!</h1>
-        <div class="container">
-            <form ACTION="https://web.inxmail.com/[Mandantenname]/subscription/servlet" METHOD="post">
+        <div class="container_kontakt">
+            <form ACTION="https://web.inxmail.com/example/subscription/servlet" METHOD="post">
                 <input type="hidden" name="INXMAIL_SUBSCRIPTION" value="[Listenname]">
                 <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg">
                 <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]"/>
