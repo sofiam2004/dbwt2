@@ -185,6 +185,7 @@
             <th>Preis intern</th>
             <th>Preis extern</th>
             <th>Allergene</th>
+            <th>Bild</th>
         </tr>
         </thead>
         <tbody>
@@ -206,6 +207,7 @@
             }
             echo "</ul>";
             echo "</td>";
+            echo "<td><img src=\"img/{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
             echo "</tr>";
         }
         ?>
@@ -220,10 +222,16 @@
             <td>5,30</td>
         </tr>
         <tr>
-            <td>...</td>
-            <td>...</td>
-            <td>...</td>
+            <td>Backfisch mit Soße, dazu Kartoffeln</td>
+            <td>2.80</td>
+            <td>3.00</td>
         </tr>
+        <tr>
+            <td>Ceaser Salat</td>
+            <td>2.90</td>
+            <td>3.20</td>
+        </tr>
+
     </table>
     </div>
     <div id="zahlen">
