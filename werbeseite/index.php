@@ -1,3 +1,4 @@
+<?php echo "Test"; ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -179,12 +180,35 @@
     <table id="tabelle">
         <thead>
         <tr id="first_row">
-            <th> </th>
+            <th>Gericht</th>
+            <th>Beschreibung</th>
             <th>Preis intern</th>
             <th>Preis extern</th>
+            <th>Allergene</th>
         </tr>
         </thead>
         <tbody>
+        <?php
+        // Externe Datei mit den Gerichten einbinden
+        include 'gerichte.php';
+
+        // Dynamische Darstellung der Gerichte
+        foreach ($gerichte as $gericht) {
+            echo "<tr>";
+            echo "<td>{$gericht['name']}</td>";
+            echo "<td>{$gericht['description']}</td>";
+            echo "<td>{$gericht['price_intern']}</td>";
+            echo "<td>{$gericht['price_extern']}</td>";
+            echo "<td>";
+            echo "<ul>";
+            foreach ($gericht['allergens'] as $allergen) {
+                echo "<li>{$allergen}</li>";
+            }
+            echo "</ul>";
+            echo "</td>";
+            echo "</tr>";
+        }
+        ?>
         <tr>
             <td>Rindfleisch mit Bambus, Kaiserschoten und roter Paprika, dazu Mie Nudeln</td>
             <td>3,50</td>
