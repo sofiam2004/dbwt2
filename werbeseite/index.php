@@ -1,4 +1,43 @@
 <?php echo "Test"; ?>
+<?php
+$counterFile = 'counter.txt';
+
+// Besucherzähler erhöhen
+$counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
+$counter++;
+file_put_contents($counterFile, $counter);
+
+// Anzeige des Zählerwertes auf der Webseite
+echo "<li>$counter Besuche</li>";
+?>
+
+<?php
+// Verbindung zur SQLite-Datenbank herstellen (falls nicht vorhanden, wird sie erstellt)
+$db = new SQLite3('visitor_counts.db');
+
+// Tabelle für die Besucherzähler erstellen (falls nicht vorhanden)
+$db->exec('CREATE TABLE IF NOT EXISTS visitors (ip TEXT PRIMARY KEY, date TEXT)');
+
+// IP-Adresse des Besuchers abrufen
+$ip = $_SERVER['REMOTE_ADDR'];
+
+// Prüfen, ob die IP-Adresse heute schon besucht hat
+$today = date('Y-m-d');
+$result = $db->querySingle("SELECT COUNT(*) FROM visitors WHERE ip = '$ip' AND date = '$today'");
+
+// Wenn die IP-Adresse heute noch nicht besucht hat, den Besucherzähler erhöhen
+if (!$result) {
+    $db->exec("INSERT INTO visitors (ip, date) VALUES ('$ip', '$today')");
+}
+
+// Gesamtanzahl der Besuche für heute abrufen und anzeigen
+$totalVisitsToday = $db->querySingle("SELECT COUNT(*) FROM visitors WHERE date = '$today'");
+echo "<li>$totalVisitsToday Besuche heute</li>";
+
+// Verbindung zur Datenbank schließen
+$db->close();
+?>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -175,6 +214,18 @@
         of Lorem Ipsum.
     </p>
     </div>
+
+    <?php
+    // Externe Datei mit den Gerichten einbinden
+    include 'gerichte.php';
+
+    // Anzahl der Gerichte zählen
+    $numberOfDishes = count($gerichte);
+
+    // Anzeige der Anzahl der Gerichte auf der Webseite
+    echo "<li>$numberOfDishes Gerichte</li>";
+    ?>
+
     <div id="speisen">
     <h1>Köstlichkeiten, die Sie erwarten</h1>
     <table id="tabelle">
@@ -189,6 +240,7 @@
         </tr>
         </thead>
         <tbody>
+
         <?php
         // Externe Datei mit den Gerichten einbinden
         include 'gerichte.php';
@@ -211,6 +263,7 @@
             echo "</tr>";
         }
         ?>
+
         <tr>
             <td>Rindfleisch mit Bambus, Kaiserschoten und roter Paprika, dazu Mie Nudeln</td>
             <td>3,50</td>
@@ -234,6 +287,7 @@
 
     </table>
     </div>
+
     <div id="zahlen">
     <h1>E-Mensa in Zahlen</h1>
     <ul class="zahlen_liste">
@@ -242,6 +296,7 @@
         <li>z Speisen</li>
     </ul>
     </div>
+
     <div id="kontakt">
     <h1>Interesse geweckt? Wir informieren Sie!</h1>
         <div class="container">
@@ -281,6 +336,17 @@
             </form>
         </div>
     </div>
+
+    <?php
+    $newsletterFile = 'newsletter_anmeldungen.txt';
+
+    // Anzahl der Anmeldungen zum Newsletter zählen
+    $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
+
+    // Anzeige der Anzahl der Newsletter-Anmeldungen auf der Webseite
+    echo "<li>$numberOfNewsletterSignups Anmeldungen zum Newsletter</li>";
+    ?>
+
     <div id="wichtig">
     <h1>Das ist uns wichtig</h1>
     <ul>
@@ -299,5 +365,7 @@
         <li><a href="impressum.html">Impressum</a></li>
     </ul>
 </footer>
+
 </body>
+
 </html>
