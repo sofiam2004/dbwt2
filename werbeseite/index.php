@@ -1,43 +1,15 @@
-<?php echo "Test"; ?>
 <?php
-$counterFile = 'counter.txt';
-
 // Besucherzähler erhöhen
+global $gerichte;
+$counterFile = 'counter.txt';
 $counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
 $counter++;
 file_put_contents($counterFile, $counter);
 
-// Anzeige des Zählerwertes auf der Webseite
-echo "<li>$counter Besuche</li>";
+// Anzahl der Anmeldungen zum Newsletter zählen
+$newsletterFile = 'newsletter_anmeldungen.txt';
+$numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
 ?>
-
-<?php
-// Verbindung zur SQLite-Datenbank herstellen (falls nicht vorhanden, wird sie erstellt)
-$db = new SQLite3('visitor_counts.db');
-
-// Tabelle für die Besucherzähler erstellen (falls nicht vorhanden)
-$db->exec('CREATE TABLE IF NOT EXISTS visitors (ip TEXT PRIMARY KEY, date TEXT)');
-
-// IP-Adresse des Besuchers abrufen
-$ip = $_SERVER['REMOTE_ADDR'];
-
-// Prüfen, ob die IP-Adresse heute schon besucht hat
-$today = date('Y-m-d');
-$result = $db->querySingle("SELECT COUNT(*) FROM visitors WHERE ip = '$ip' AND date = '$today'");
-
-// Wenn die IP-Adresse heute noch nicht besucht hat, den Besucherzähler erhöhen
-if (!$result) {
-    $db->exec("INSERT INTO visitors (ip, date) VALUES ('$ip', '$today')");
-}
-
-// Gesamtanzahl der Besuche für heute abrufen und anzeigen
-$totalVisitsToday = $db->querySingle("SELECT COUNT(*) FROM visitors WHERE date = '$today'");
-echo "<li>$totalVisitsToday Besuche heute</li>";
-
-// Verbindung zur Datenbank schließen
-$db->close();
-?>
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -46,7 +18,6 @@ $db->close();
     <style>
         body {
             width: 1200px;
-            display: block;
             margin: 0 auto;
             padding: 0;
             height: 100%;
@@ -60,16 +31,14 @@ $db->close();
         }
         .container_nav {
             display: flex;
+            justify-content: center;
+            align-items: center;
         }
         nav ul {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 5px;
-            padding-left: 0;
-            padding-right: 0;
-            top: 0;
-            z-index: 1000;
+            padding: 5px 0;
             list-style: none;
             letter-spacing: 2px;
             width: 600px;
@@ -83,11 +52,9 @@ $db->close();
             width: 200px;
             margin-left: 20px;
         }
-
         p {
             border: 1px solid lightgray;
             padding: 10px;
-            text-align: center;
             max-width: 70%;
             margin: auto;
         }
@@ -124,7 +91,6 @@ $db->close();
             margin-left: 10px;
             text-align: left;
         }
-
         input[type=text], select {
             width: 100%;
             padding: 12px;
@@ -133,9 +99,7 @@ $db->close();
             box-sizing: border-box;
             margin-top: 6px;
             margin-bottom: 10px;
-            resize: vertical;
         }
-
         .container {
             margin: auto;
             width: 400px;
@@ -144,7 +108,6 @@ $db->close();
             padding: 20px;
             text-align: left;
         }
-
         button {
             background-color: #4b4241;
             color: white;
@@ -154,18 +117,14 @@ $db->close();
             cursor: pointer;
             margin-top: 15px;
         }
-
         button:hover {
             background-color: #00a19c;
-
         }
-
         label {
             display: block;
             margin-bottom: 5px;
         }
-
-        .impressum{
+        .impressum {
             display: flex;
             list-style: none;
             justify-content: center;
@@ -173,46 +132,44 @@ $db->close();
             margin-top: 50px;
             margin-bottom: 40px;
         }
-
         .impressum li:not(:last-child):after {
             content: "|";
             margin-left: 20px;
             margin-right: 20px;
-            color: coral;;
+            color: coral;
         }
         .impressum a:hover {
             color: #ff0000;
             text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
 <header>
     <div class="container_nav">
-        <img src="platzhalter-img-3.jpg" alt="Logo" title="Logo">
-    <nav>
-        <ul>
-            <li><a href="#ankündigung">Ankündigung</a></li>
-            <li><a href="#speisen">Speisen</a></li>
-            <li><a href="#zahlen">Zahlen</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
-            <li><a href="#wichtig">Wichtig für uns</a></li>
-        </ul>
-    </nav>
+        <img src="logo.jpeg" alt="Logo" title="Logo">
+        <nav>
+            <ul>
+                <li><a href="#ankündigung">Ankündigung</a></li>
+                <li><a href="#speisen">Speisen</a></li>
+                <li><a href="#zahlen">Zahlen</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+                <li><a href="#wichtig">Wichtig für uns</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 <main>
-    <img src="beispielbild" alt="Beispiel-Bild" title="Beispiel-Bild">
+    <img src="bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
     <div id="ankündigung">
-    <h1>Bald gibt es Essen auch online ;)</h1>
-    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
-        a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-        Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.
-    </p>
+        <h1>Bald gibt es Essen auch online ;)</h1>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+            a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
+            of Lorem Ipsum.
+        </p>
     </div>
 
     <?php
@@ -222,89 +179,65 @@ $db->close();
     // Anzahl der Gerichte zählen
     $numberOfDishes = count($gerichte);
 
-    // Anzeige der Anzahl der Gerichte auf der Webseite
-    echo "<li>$numberOfDishes Gerichte</li>";
     ?>
 
     <div id="speisen">
-    <h1>Köstlichkeiten, die Sie erwarten</h1>
-    <table id="tabelle">
-        <thead>
-        <tr id="first_row">
-            <th>Gericht</th>
-            <th>Beschreibung</th>
-            <th>Preis intern</th>
-            <th>Preis extern</th>
-            <th>Allergene</th>
-            <th>Bild</th>
-        </tr>
-        </thead>
-        <tbody>
+        <h1>Köstlichkeiten, die Sie erwarten</h1>
+        <table id="tabelle">
+            <thead>
+            <tr id="first_row">
+                <th>Gericht</th>
+                <th>Beschreibung</th>
+                <th>Preis intern</th>
+                <th>Preis extern</th>
+                <th>Allergene</th>
+                <th>Bild</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <?php
-        // Externe Datei mit den Gerichten einbinden
-        include 'gerichte.php';
-
-        // Dynamische Darstellung der Gerichte
-        foreach ($gerichte as $gericht) {
-            echo "<tr>";
-            echo "<td>{$gericht['name']}</td>";
-            echo "<td>{$gericht['description']}</td>";
-            echo "<td>{$gericht['price_intern']}</td>";
-            echo "<td>{$gericht['price_extern']}</td>";
-            echo "<td>";
-            echo "<ul>";
-            foreach ($gericht['allergens'] as $allergen) {
-                echo "<li>{$allergen}</li>";
+            <?php
+            // Dynamische Darstellung der Gerichte
+            foreach ($gerichte as $gericht) {
+                echo "<tr>";
+                echo "<td>{$gericht['name']}</td>";
+                echo "<td>{$gericht['description']}</td>";
+                echo "<td>{$gericht['price_intern']}</td>";
+                echo "<td>{$gericht['price_extern']}</td>";
+                echo "<td>";
+                echo "<ul>";
+                foreach ($gericht['allergens'] as $allergen) {
+                    echo "<li>{$allergen}</li>";
+                }
+                echo "</ul>";
+                echo "</td>";
+                echo "<td><img src=\"img/{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
+                echo "</tr>";
             }
-            echo "</ul>";
-            echo "</td>";
-            echo "<td><img src=\"img/{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
-            echo "</tr>";
-        }
-        ?>
+            ?>
 
-        <tr>
-            <td>Rindfleisch mit Bambus, Kaiserschoten und roter Paprika, dazu Mie Nudeln</td>
-            <td>3,50</td>
-            <td>6,20</td>
-        </tr>
-        <tr>
-            <td>Spinatrisotto mit kleinen Samosateigecken und gemischter Salat</td>
-            <td>2,90</td>
-            <td>5,30</td>
-        </tr>
-        <tr>
-            <td>Backfisch mit Soße, dazu Kartoffeln</td>
-            <td>2.80</td>
-            <td>3.00</td>
-        </tr>
-        <tr>
-            <td>Ceaser Salat</td>
-            <td>2.90</td>
-            <td>3.20</td>
-        </tr>
-
-    </table>
+            </tbody>
+        </table>
     </div>
 
     <div id="zahlen">
-    <h1>E-Mensa in Zahlen</h1>
-    <ul class="zahlen_liste">
-        <li>x Besuche</li>
-        <li>y Anmeldungen zum Newsletter</li>
-        <li>z Speisen</li>
-    </ul>
+        <h1>E-Mensa in Zahlen</h1>
+        <ul class="zahlen_liste">
+            <li><?php echo $counter; ?> Besuche</li>
+            <li><?php echo $numberOfNewsletterSignups; ?> Newsletter Anmeldungen</li>
+            <li><?php echo $numberOfDishes; ?> Gerichte</li>
+
+        </ul>
     </div>
 
     <div id="kontakt">
-    <h1>Interesse geweckt? Wir informieren Sie!</h1>
+        <h1>Interesse geweckt? Wir informieren Sie!</h1>
         <div class="container">
-            <form ACTION="https://web.inxmail.com/[Mandantenname]/subscription/servlet" METHOD="post">
+            <form action="https://web.inxmail.com/[Mandantenname]/subscription/servlet" method="post">
                 <input type="hidden" name="INXMAIL_SUBSCRIPTION" value="[Listenname]">
-                <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg">
-                <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]"/>
-                <input type="hidden" name="INXMAIL_CHARSET" value="UTF-8"/>
+                <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg]">
+                <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]">
+                <input type="hidden" name="INXMAIL_CHARSET" value="UTF-8">
                 <label>E-Mail*
                     <input type="text" name="email">
                 </label>
@@ -328,32 +261,20 @@ $db->close();
                     </select>
                 </label>
                 <label>
-                    <input type="checkbox" name="INXMAIL_TRACKINGPERMISSION">  Hiermit stimme ich den Datenschutzbestimmungen zu
+                    <input type="checkbox" name="INXMAIL_TRACKINGPERMISSION"> Hiermit stimme ich den Datenschutzbestimmungen zu
                 </label>
-                <label>
-                    <input type="submit" name="Submit" value="Newsletter Anmelden">
-                </label>
+                <button type="submit">Newsletter Anmelden</button>
             </form>
         </div>
     </div>
 
-    <?php
-    $newsletterFile = 'newsletter_anmeldungen.txt';
-
-    // Anzahl der Anmeldungen zum Newsletter zählen
-    $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
-
-    // Anzeige der Anzahl der Newsletter-Anmeldungen auf der Webseite
-    echo "<li>$numberOfNewsletterSignups Anmeldungen zum Newsletter</li>";
-    ?>
-
     <div id="wichtig">
-    <h1>Das ist uns wichtig</h1>
-    <ul>
-        <li>Beste frische saisonale Zutaten</li>
-        <li>Ausgewogene abwechslungsreiche Gerichte</li>
-        <li>Sauberkeit</li>
-    </ul>
+        <h1>Das ist uns wichtig</h1>
+        <ul>
+            <li>Beste frische saisonale Zutaten</li>
+            <li>Ausgewogene abwechslungsreiche Gerichte</li>
+            <li>Sauberkeit</li>
+        </ul>
     </div>
 
     <h1>Wir freuen uns auf Ihren Besuch!</h1>
@@ -365,7 +286,5 @@ $db->close();
         <li><a href="impressum.html">Impressum</a></li>
     </ul>
 </footer>
-
 </body>
-
 </html>
