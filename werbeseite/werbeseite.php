@@ -1,3 +1,5 @@
+
+
 <?php
 // Besucherzähler erhöhen
 global $gerichte;
@@ -9,7 +11,51 @@ file_put_contents($counterFile, $counter);
 // Anzahl der Anmeldungen zum Newsletter zählen
 $newsletterFile = 'newsletter_anmeldungen.txt';
 $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
+
+$error = ""; // Variable für Fehlermeldung
+
+// Funktion zum Überprüfen der E-Mail-Adresse
+function isValidEmail($email) {
+    // Überprüfung auf gültiges E-Mail-Format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+
+    // Überprüfung auf unerwünschte Domains
+    $unwanted_domains = array("rcpt.at", "damnthespam.at", "wegwerfmail.de", "trashmail.");
+    foreach ($unwanted_domains as $domain) {
+        if (strpos($email, $domain) !== false) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Funktion zum Speichern der Anmeldedaten
+function saveNewsletterSignup($data) {
+    $file = 'newsletter_anmeldungen.txt';
+    $handle = fopen($file, 'a');
+    fwrite($handle, $data);
+    fclose($handle);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Überprüfung, ob alle erforderlichen Felder ausgefüllt wurden
+    if (empty($_POST["email"]) || empty($_POST["Vorname"]) || empty($_POST["Nachname"])) {
+        $error = "Bitte füllen Sie alle erforderlichen Felder aus.";
+    } elseif (!isset($_POST["INXMAIL_TRACKINGPERMISSION"])) {
+        $error = "Bitte stimmen Sie den Datenschutzbestimmungen zu.";
+    } elseif (!isValidEmail($_POST["email"])) {
+        $error = "Die eingegebene E-Mail-Adresse entspricht nicht den Vorgaben.";
+    } else {
+        // Anmeldung erfolgreich
+        $newsletterData = "E-Mail: {$_POST['email']}, Anrede: {$_POST['Anrede']}, Vorname: {$_POST['Vorname']}, Nachname: {$_POST['Nachname']}, Sprache Newsletter: {$_POST['Newsletter_bitte_in:']}\n";
+        saveNewsletterSignup($newsletterData);
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -233,7 +279,7 @@ $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsle
     <div id="kontakt">
         <h1>Interesse geweckt? Wir informieren Sie!</h1>
         <div class="container">
-            <form action="https://web.inxmail.com/[Mandantenname]/subscription/servlet" method="post">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <input type="hidden" name="INXMAIL_SUBSCRIPTION" value="[Listenname]">
                 <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg]">
                 <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]">
@@ -265,6 +311,15 @@ $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsle
                 </label>
                 <button type="submit">Newsletter Anmelden</button>
             </form>
+
+            <?php
+            // Erfolgsmeldung oder Fehlermeldung anzeigen
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($error)) {
+                echo "<p style='color: green;'>Vielen Dank für Ihre Anmeldung zum Newsletter!</p>";
+            } elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($error)) {
+                echo "<p style='color: red;'>$error</p>";
+            }
+            ?>
         </div>
     </div>
 
@@ -288,3 +343,5 @@ $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsle
 </footer>
 </body>
 </html>
+
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">

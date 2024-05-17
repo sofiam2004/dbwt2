@@ -6,7 +6,7 @@ $gerichte = [
         'price_intern' => '3,50',
         'price_extern' => '6,20',
         'allergens' => ['Gluten', 'Soja'],
-        'image' => 'rindfleisch_gericht.jpg'
+        'image' => 'rindfleisch_gericht.jpg',
     ],
     [
         'name' => 'Spinatrisotto',
