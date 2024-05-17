@@ -211,7 +211,7 @@ $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsle
                 }
                 echo "</ul>";
                 echo "</td>";
-                echo "<td><img src=\"img/{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
+                echo "<td><img src=\"{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
                 echo "</tr>";
             }
             ?>

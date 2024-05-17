@@ -6,7 +6,7 @@ $gerichte = [
         'price_intern' => '3,50',
         'price_extern' => '6,20',
         'allergens' => ['Gluten', 'Soja'],
-        'image' => 'rindfleisch.jpg'
+        'image' => 'rindfleisch_gericht.jpg'
     ],
     [
         'name' => 'Spinatrisotto',
@@ -22,7 +22,7 @@ $gerichte = [
         'price_intern' => '2.80',
         'price_extern' => '3.00',
         'allergens' => ['Fisch', 'Gluten'],
-        'image' => 'backfisch.jpg'
+        'image' => 'backfisch-soße.jpg'
     ],
     [
         'name' => 'Ceaser Salat',
