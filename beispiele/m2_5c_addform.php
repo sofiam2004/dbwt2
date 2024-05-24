@@ -14,9 +14,10 @@ function multiplizieren ($a, $b): int {
     return $a * $b;
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['addieren']) {
-        $ergebnis = $_POST['a'] + $_POST['b'];
+        $ergebnis = addieren($_POST['a'], $_POST['b']);
         echo "Das Ergebnis der Addition von {$_POST['a']} und {$_POST['b']} ist: $ergebnis";
     }
     elseif ($_POST['multiplizieren']){

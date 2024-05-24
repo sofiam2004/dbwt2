@@ -1,6 +1,10 @@
-
-
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Rabia, Türe, 3674806
+ * Sofia, Moll, 3637355
+ */
+
 // Besucherzähler erhöhen
 global $gerichte;
 $counterFile = 'counter.txt';
@@ -9,13 +13,14 @@ $counter++;
 file_put_contents($counterFile, $counter);
 
 // Anzahl der Anmeldungen zum Newsletter zählen
-$newsletterFile = 'newsletter_anmeldungen.txt';
+$newsletterFile = 'newsletter_anmeldungen';
 $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
 
 $error = ""; // Variable für Fehlermeldung
 
 // Funktion zum Überprüfen der E-Mail-Adresse
-function isValidEmail($email) {
+function isValidEmail($email): bool
+{
     // Überprüfung auf gültiges E-Mail-Format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return false;
@@ -24,7 +29,7 @@ function isValidEmail($email) {
     // Überprüfung auf unerwünschte Domains
     $unwanted_domains = array("rcpt.at", "damnthespam.at", "wegwerfmail.de", "trashmail.");
     foreach ($unwanted_domains as $domain) {
-        if (strpos($email, $domain) !== false) {
+        if (str_contains($email, $domain)) {
             return false;
         }
     }
@@ -34,7 +39,7 @@ function isValidEmail($email) {
 
 // Funktion zum Speichern der Anmeldedaten
 function saveNewsletterSignup($data) {
-    $file = 'newsletter_anmeldungen.txt';
+    $file = 'newsletter_anmeldungen';
     $handle = fopen($file, 'a');
     fwrite($handle, $data);
     fclose($handle);
@@ -257,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 echo "</ul>";
                 echo "</td>";
-                echo "<td><img src=\"{$gericht['image']}\" alt=\"{$gericht['name']}\"></td>";
+                echo "<td><img src=\"{$gericht['image']}\" alt=\"{$gericht['name']}\" width='100'></td>";
                 echo "</tr>";
             }
             ?>

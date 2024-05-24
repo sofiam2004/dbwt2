@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Praktikum DBWT. Autoren:
+ * Rabia, Türe, 3674806
+ * Sofia, Moll, 3637355
+ */
 // Array mit berühmten Mahlzeiten und den dazugehörigen Gewinnjahren
 $famousMeals = [
     1 => ['name' => 'Currywurst mit Pommes', 'winner' => [2001, 2003, 2007, 2010, 2020]],

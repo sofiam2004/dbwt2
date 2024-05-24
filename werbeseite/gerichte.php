@@ -1,4 +1,10 @@
 <?php
+/**
+ * Praktikum DBWT. Autoren:
+ * Rabia, Türe, 3674806
+ * Sofia, Moll, 3637355
+ */
+
 $gerichte = [
     [
         'name' => 'Rindfleisch mit Bambus',
