@@ -1,4 +1,4 @@
-<?php
+<?php global $result;
 /**
  * Praktikum DBWT. Autoren:
  * Rabia, Türe, 3674806
@@ -59,6 +59,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         saveNewsletterSignup($newsletterData);
     }
 }
+
+
+// Verbindung zur Datenbank herstellen
+$link = mysqli_connect(
+    "localhost",      // Host der Datenbank
+    "root",           // Benutzername zur Anmeldung
+    "emiliebff",            // Passwort
+    "emensawerbeseite" // Datenbankschema
+// Optionaler Port der Datenbank
+);
+
+if (!$link) {
+    // Verbindungsfehler anzeigen und beenden, falls die Verbindung fehlschlägt
+    echo "Verbindung fehlgeschlagen: ", mysqli_connect_error();
+    exit();
+}
+
+// SQL-Abfrage, um Daten aus der Tabelle 'gericht' auszuwählen
+$sql = "SELECT g.id, g.name, g.beschreibung, g.preis_intern, g.preis_extern, ga.code
+        FROM (
+            SELECT id, name, beschreibung, preis_intern, preis_extern
+            FROM gericht
+            ORDER BY name 
+            LIMIT 5
+        ) AS g
+        LEFT JOIN gericht_hat_allergen ga ON g.id = ga.gericht_id
+        ORDER BY g.name 
+        ";
+
+$res = mysqli_query($link, $sql);
+
+if (!$res) {
+    die("Abfragefehler: " . mysqli_error($link));
+}
+
+// Array für Gerichte und deren Allergene
+$ger = array();
+
+// Alle Gerichte und deren Allergene erfassen
+while ($row = mysqli_fetch_assoc($res)) {
+    $gericht_id = $row['id'];
+    if (!isset($ger[$gericht_id])) {
+        $ger[$gericht_id] = array(
+            'name' => $row['name'],
+            'beschreibung' => $row['beschreibung'],
+            'preis_intern' => $row['preis_intern'],
+            'preis_extern' => $row['preis_extern'],
+            'allergene' => array()
+        );
+    }
+    if (!empty($row['code'])) {
+        $ger[$gericht_id]['allergene'][] = $row['code'];
+    }
+}
+
+// SQL Abfrage für Allergene
+$sql2 = "SELECT DISTINCT code FROM allergen";
+$allergene_res = mysqli_query($link, $sql2);
+
 ?>
 
 <!DOCTYPE html>
@@ -193,6 +252,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #ff0000;
             text-decoration: underline;
         }
+
+        .allergene-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .allergene-list li {
+            display: inline-block;
+            margin-right: 10px; /* Abstand zwischen den Allergenen */
+        }
+
     </style>
 </head>
 <body>
@@ -265,10 +336,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "<td><img src=\"{$gericht['image']}\" alt=\"{$gericht['name']}\" width='100'></td>";
                 echo "</tr>";
             }
+
+
+
+        // Dynamische Darstellung der Gerichte aus der Datenbank
+
+            foreach ($ger as $gericht) {
+                echo "<tr>";
+                echo "<td>{$gericht['name']}</td>";
+                echo "<td>{$gericht['beschreibung']}</td>";
+                echo "<td>{$gericht['preis_intern']}</td>";
+                echo "<td>{$gericht['preis_extern']}</td>";
+                echo "<td>";
+                echo "<ul>";
+                foreach ($gericht['allergene'] as $allergen) {
+                    echo "<li>{$allergen}</li>";
+                }
+                echo "</ul>";
+                echo "</td>";
+                echo "</tr>";
+            }
             ?>
+
 
             </tbody>
         </table>
+    </div>
+    <div id="allergene">
+        <h2>Verwendete Allergene</h2>
+        <ul class="allergene-list">
+            <?php
+            // Liste der verwendeten Allergene anzeigen
+            while ($allergen = mysqli_fetch_assoc($allergene_res)) {
+                echo "<li>{$allergen['code']}</li>";
+            }
+            ?>
+        </ul>
     </div>
 
     <div id="zahlen">
