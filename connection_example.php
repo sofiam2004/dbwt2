@@ -2,8 +2,8 @@
 
 $link=mysqli_connect(
     "localhost", // Host der Datenbank
-    "root",                 // Benutzername zur Anmeldung
-    "...",    // Passwort
+    "root",      // Benutzername zur Anmeldung
+    "...",         // Passwort
     "emensawerbeseite"      // Auswahl der Datenbanken (bzw. des Schemas)
         // optional port der Datenbank
 );
@@ -13,7 +13,7 @@ if (!$link) {
     exit();
 }
 
-$sql = "SELECT id, name, beschreibung FROM gericht";
+$sql = "SELECT id, name, beschreibung FROM emensawerbeseite.gericht";
 
 $result = mysqli_query($link, $sql);
 if (!$result) {
