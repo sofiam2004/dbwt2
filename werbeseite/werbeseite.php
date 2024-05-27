@@ -163,9 +163,9 @@ $allergene_res = mysqli_query($link, $sql2);
             margin-left: 20px;
         }
         p {
-            border: 1px solid lightgray;
             padding: 10px;
-            max-width: 70%;
+            max-width: 80%;
+            text-align: left;
             margin: auto;
         }
         #tabelle {
@@ -285,12 +285,16 @@ $allergene_res = mysqli_query($link, $sql2);
     <img src="bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
     <div id="ankündigung">
         <h1>Bald gibt es Essen auch online ;)</h1>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
-            a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
-            of Lorem Ipsum.
+        <p>Liebe Studierende,<br><br>herzlich willkommen auf unserer digitalen Mensa-Plattform!
+            Wir freuen uns darauf, Ihnen schon bald ein neues kulinarisches Erlebnis bieten zu können.<br>
+            In unserer Online-Mensa erwartet Sie eine Vielzahl köstlicher Gerichte, die Ihren Geschmackssinn
+            verwöhnen und Ihren Studienalltag bereichern werden. Von klassischen Favoriten bis hin zu innovativen
+            Spezialitäten - wir haben für jeden Geschmack etwas dabei. <br> Unsere Webseite wird Ihr neuer
+            Anlaufpunkt für frische und schmackhafte Mahlzeiten sein, die Sie bequem von überall aus genießen
+            können. Egal, ob Sie auf dem Campus sind oder von zu Hause aus lernen - unsere digitale Mensa steht
+            Ihnen rund um die Uhr zur Verfügung. <br> Wir arbeiten daran, Ihnen ein herausragendes kulinarisches
+            Erlebnis zu bieten, und freuen uns darauf, Sie schon bald in unserer digitalen Mensa begrüßen zu dürfen.
+            <br><br> Bleiben Sie gespannt und halten Sie Ausschau nach weiteren Informationen!
         </p>
     </div>
 
