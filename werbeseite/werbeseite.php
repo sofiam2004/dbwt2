@@ -5,8 +5,11 @@
  * Sofia, Moll, 3637355
  */
 
+include 'gerichte.php';
+
 // Besucherzähler erhöhen
 global $gerichte;
+$count_gerichte_aus_db = 0;
 $counterFile = 'counter.txt';
 $counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
 $counter++;
@@ -38,7 +41,8 @@ function isValidEmail($email): bool
 }
 
 // Funktion zum Speichern der Anmeldedaten
-function saveNewsletterSignup($data) {
+function saveNewsletterSignup($data): void
+{
     $file = 'newsletter_anmeldungen';
     $handle = fopen($file, 'a');
     fwrite($handle, $data);
@@ -117,6 +121,17 @@ while ($row = mysqli_fetch_assoc($res)) {
 // SQL Abfrage für Allergene
 $sql2 = "SELECT DISTINCT code FROM allergen";
 $allergene_res = mysqli_query($link, $sql2);
+
+
+// Counter von Gerichten aus DB
+
+
+$count_gerichte_aus_db = count($ger);
+
+
+// Anzahl der Gerichte zählen
+$numberOfDishes = count($gerichte);
+$numberOfDishes += $count_gerichte_aus_db;
 
 ?>
 
@@ -298,14 +313,6 @@ $allergene_res = mysqli_query($link, $sql2);
         </p>
     </div>
 
-    <?php
-    // Externe Datei mit den Gerichten einbinden
-    include 'gerichte.php';
-
-    // Anzahl der Gerichte zählen
-    $numberOfDishes = count($gerichte);
-
-    ?>
 
     <div id="speisen">
         <h1>Köstlichkeiten, die Sie erwarten</h1>
