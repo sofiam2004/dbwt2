@@ -1,4 +1,4 @@
-<?php global $result;
+<?php
 /**
  * Praktikum DBWT. Autoren:
  * Rabia, Türe, 3674806
@@ -6,10 +6,10 @@
  */
 
 include 'gerichte.php';
-
-// Besucherzähler erhöhen
 global $gerichte;
 $count_gerichte_aus_db = 0;
+
+// Besucherzähler erhöhen
 $counterFile = 'counter.txt';
 $counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
 $counter++;
@@ -19,11 +19,12 @@ file_put_contents($counterFile, $counter);
 $newsletterFile = 'newsletter_anmeldungen';
 $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsletterFile)) : 0;
 
+
+# Newsletteranmeldung
 $error = ""; // Variable für Fehlermeldung
 
-// Funktion zum Überprüfen der E-Mail-Adresse
-function isValidEmail($email): bool
-{
+// Funktion zur Überprüfung der E-Mail-Adresse
+function isValidEmail($email): bool {
     // Überprüfung auf gültiges E-Mail-Format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return false;
@@ -36,31 +37,33 @@ function isValidEmail($email): bool
             return false;
         }
     }
-
     return true;
 }
 
-// Funktion zum Speichern der Anmeldedaten
-function saveNewsletterSignup($data): void
-{
+// Funktion zum Speichern der Newsletter-Anmeldung in einer Textdatei
+function saveNewsletterSignup($data): void {
     $file = 'newsletter_anmeldungen';
-    $handle = fopen($file, 'a');
-    fwrite($handle, $data);
-    fclose($handle);
+    file_put_contents($file, $data, FILE_APPEND);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Überprüfung, ob alle erforderlichen Felder ausgefüllt wurden
     if (empty($_POST["email"]) || empty($_POST["Vorname"]) || empty($_POST["Nachname"])) {
         $error = "Bitte füllen Sie alle erforderlichen Felder aus.";
-    } elseif (!isset($_POST["INXMAIL_TRACKINGPERMISSION"])) {
+    } elseif (!isset($_POST["datenschutz"])) {
         $error = "Bitte stimmen Sie den Datenschutzbestimmungen zu.";
     } elseif (!isValidEmail($_POST["email"])) {
         $error = "Die eingegebene E-Mail-Adresse entspricht nicht den Vorgaben.";
     } else {
         // Anmeldung erfolgreich
-        $newsletterData = "E-Mail: {$_POST['email']}, Anrede: {$_POST['Anrede']}, Vorname: {$_POST['Vorname']}, Nachname: {$_POST['Nachname']}, Sprache Newsletter: {$_POST['Newsletter_bitte_in:']}\n";
+        $newsletterData = "E-Mail: {$_POST['email']}, Anrede: {$_POST['Anrede']}, Vorname: {$_POST['Vorname']}, Nachname: {$_POST['Nachname']}, Sprache Newsletter: {$_POST['Newsletter_bitte_in']}\n";
         saveNewsletterSignup($newsletterData);
+        echo "<span class='erfolgreich'>Anmeldung erfolgreich!</span>";
+    }
+
+    // Anzeige der Fehlermeldung, falls vorhanden
+    if ($error) {
+        echo "<span class='error-message'>$error</span>";
     }
 }
 
@@ -69,9 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $link = mysqli_connect(
     "localhost",      // Host der Datenbank
     "root",           // Benutzername zur Anmeldung
-    "emiliebff",            // Passwort
+    "emiliebff",       // Passwort
     "emensawerbeseite" // Datenbankschema
-// Optionaler Port der Datenbank
 );
 
 if (!$link) {
@@ -81,14 +83,16 @@ if (!$link) {
 }
 
 // SQL-Abfrage, um Daten aus der Tabelle 'gericht' auszuwählen
+// Code wählt ersten fünf Gerichte nach Namen sortiert aus und fügt dann die
+// Allergencodes dieser Gerichte hinzu, falls vorhanden
 $sql = "SELECT g.id, g.name, g.beschreibung, g.preis_intern, g.preis_extern, ga.code
         FROM (
             SELECT id, name, beschreibung, preis_intern, preis_extern
-            FROM gericht
+            FROM emensawerbeseite.gericht
             ORDER BY name 
             LIMIT 5
         ) AS g
-        LEFT JOIN gericht_hat_allergen ga ON g.id = ga.gericht_id
+        LEFT JOIN emensawerbeseite.gericht_hat_allergen ga ON g.id = ga.gericht_id
         ORDER BY g.name 
         ";
 
@@ -103,37 +107,54 @@ $ger = array();
 
 // Alle Gerichte und deren Allergene erfassen
 while ($row = mysqli_fetch_assoc($res)) {
+    // Die ID des aktuellen Gerichts aus der Datenbankzeile holen
     $gericht_id = $row['id'];
+
+    // Prüfen, ob das Gericht bereits im Array 'ger' existiert
     if (!isset($ger[$gericht_id])) {
+        // Wenn das Gericht noch nicht existiert, initialisiere es mit den Grunddaten
         $ger[$gericht_id] = array(
             'name' => $row['name'],
             'beschreibung' => $row['beschreibung'],
             'preis_intern' => $row['preis_intern'],
             'preis_extern' => $row['preis_extern'],
-            'allergene' => array()
+            'allergene' => array()                  // Initialisiere ein leeres Array für Allergene
         );
     }
+
+    // Wenn der Allergencode nicht leer ist
     if (!empty($row['code'])) {
+        // Füge den Allergencode dem Array der Allergene des Gerichts hinzu
         $ger[$gericht_id]['allergene'][] = $row['code'];
     }
 }
 
-// SQL Abfrage für Allergene
-$sql2 = "SELECT DISTINCT code FROM allergen";
+
+// SQL für Allergencodes, die unten aufgelistet werden
+$sql2 = "SELECT DISTINCT code FROM emensawerbeseite.allergen";
 $allergene_res = mysqli_query($link, $sql2);
 
 
-// Counter von Gerichten aus DB
-
-
-$count_gerichte_aus_db = count($ger);
-
-
 // Anzahl der Gerichte zählen
-$numberOfDishes = count($gerichte);
+$count_gerichte_aus_db = count($ger); // Gerichte aus DB
+$numberOfDishes = count($gerichte); // Gerichte aus gerichte.php
 $numberOfDishes += $count_gerichte_aus_db;
 
+
+// Statistiken in Datenbank darstellen
+
+// löscht alles aus "zahlen", damit immer 1 Zeile in der Tabelle ist
+$del = "DELETE FROM emensawerbeseite.zahlen";
+$loesch = mysqli_query($link, $del);
+
+// Hinzufügen der neuen Statistiken zur Tabelle "zahlen"
+$sql_zahlen = "INSERT INTO zahlen (anzahl_gerichte, anzahl_anmeldungen, anzahl_besucher) 
+                VALUES ($numberOfDishes, $numberOfNewsletterSignups, $counter)";
+$zahlen = mysqli_query($link,$sql_zahlen);
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="de">
@@ -141,6 +162,15 @@ $numberOfDishes += $count_gerichte_aus_db;
     <meta charset="UTF-8">
     <title>Ihre E-Mensa</title>
     <style>
+
+        .error-message {
+            font-size: 20px;
+            color: red;
+        }
+        .erfolgreich {
+            font-size: 20px;
+            color: green;
+        }
         body {
             width: 1200px;
             margin: 0 auto;
@@ -279,6 +309,24 @@ $numberOfDishes += $count_gerichte_aus_db;
             margin-right: 10px; /* Abstand zwischen den Allergenen */
         }
 
+        #link_wunschgericht {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #link_wunschgericht a {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid green; /* Dünner grüner Rahmen */
+            color: green; /* Grüne Schriftfarbe */
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        #link_wunschgericht a:hover {
+            background-color: lightgreen; /* Helle grüne Hintergrundfarbe beim Hovern */
+        }
+
     </style>
 </head>
 <body>
@@ -329,6 +377,9 @@ $numberOfDishes += $count_gerichte_aus_db;
             </thead>
             <tbody>
 
+            <p id="link_wunschgericht"><a href="wunschgericht.php">Klicke hier, um uns dein Wunschgericht zu nennen</a></p>
+
+
             <?php
             // Dynamische Darstellung der Gerichte
             foreach ($gerichte as $gericht) {
@@ -349,9 +400,7 @@ $numberOfDishes += $count_gerichte_aus_db;
             }
 
 
-
-        // Dynamische Darstellung der Gerichte aus der Datenbank
-
+            // Dynamische Darstellung der Gerichte aus der Datenbank
             foreach ($ger as $gericht) {
                 echo "<tr>";
                 echo "<td>{$gericht['name']}</td>";
@@ -360,7 +409,9 @@ $numberOfDishes += $count_gerichte_aus_db;
                 echo "<td>{$gericht['preis_extern']}</td>";
                 echo "<td>";
                 echo "<ul>";
+                // Iteriere über jedes Allergen des aktuellen Gerichts
                 foreach ($gericht['allergene'] as $allergen) {
+                    // Gib jedes Allergen als Listenelement in der ungeordneten Liste aus
                     echo "<li>{$allergen}</li>";
                 }
                 echo "</ul>";
@@ -373,6 +424,7 @@ $numberOfDishes += $count_gerichte_aus_db;
             </tbody>
         </table>
     </div>
+
     <div id="allergene">
         <h2>Verwendete Allergene</h2>
         <ul class="allergene-list">
@@ -399,10 +451,6 @@ $numberOfDishes += $count_gerichte_aus_db;
         <h1>Interesse geweckt? Wir informieren Sie!</h1>
         <div class="container">
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <input type="hidden" name="INXMAIL_SUBSCRIPTION" value="[Listenname]">
-                <input type="hidden" name="INXMAIL_HTTP_REDIRECT" value="[URL für Landeseite Erfolg]">
-                <input type="hidden" name="INXMAIL_HTTP_REDIRECT_ERROR" value="[URL für Landeseite Fehler]">
-                <input type="hidden" name="INXMAIL_CHARSET" value="UTF-8">
                 <label>E-Mail*
                     <input type="text" name="email">
                 </label>
@@ -420,16 +468,17 @@ $numberOfDishes += $count_gerichte_aus_db;
                     <input type="text" name="Nachname">
                 </label>
                 <label>Sprache Newsletter
-                    <select name="Newsletter bitte in:">
+                    <select name="Newsletter_bitte_in">
                         <option value="Deutsch">Deutsch</option>
                         <option value="Englisch">Englisch</option>
                     </select>
                 </label>
                 <label>
-                    <input type="checkbox" name="INXMAIL_TRACKINGPERMISSION"> Hiermit stimme ich den Datenschutzbestimmungen zu
+                    <input type="checkbox" name="datenschutz"> Hiermit stimme ich den Datenschutzbestimmungen zu
                 </label>
                 <button type="submit">Newsletter Anmelden</button>
             </form>
+
 
             <?php
             // Erfolgsmeldung oder Fehlermeldung anzeigen

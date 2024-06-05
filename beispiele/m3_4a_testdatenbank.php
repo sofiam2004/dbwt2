@@ -15,7 +15,7 @@ if (!$link) {
 }
 
 // SQL-Abfrage, um Daten aus der Tabelle 'gericht' auszuwählen
-$sql = "SELECT code, name, typ FROM allergen";
+$sql = "SELECT code, name, typ FROM emensawerbeseite.allergen";
 
 $res = mysqli_query($link, $sql);
 
