@@ -1,0 +1,207 @@
+.error-message {
+    font-size: 20px;
+    color: red;
+}
+.erfolgreich {
+    font-size: 20px;
+    color: green;
+}
+body {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    height: 100%;
+    text-align: center;
+}
+main {
+    display: block;
+}
+h1 {
+    margin-top: 60px;
+}
+.container_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+    list-style: none;
+    letter-spacing: 2px;
+    width: 600px;
+    border: 1px solid #ccc;
+    margin: auto;
+}
+nav ul li {
+    padding: 10px;
+}
+.container_nav img {
+    width: 200px;
+    margin-left: 20px;
+}
+p {
+    padding: 10px;
+    max-width: 80%;
+    text-align: left;
+    margin: auto;
+}
+#tabelle {
+    margin: auto;
+    border: 2px solid lightgray;
+    border-collapse: collapse;
+    text-align: center;
+}
+th, td {
+    border: 1px solid lightgray;
+    padding: 8px;
+}
+.zahlen_liste {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0;
+    font-size: 23px;
+    font-weight: bold;
+}
+.zahlen_liste li {
+    padding: 20px;
+}
+#wichtig ul {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 0;
+    width: 300px;
+}
+#wichtig ul li {
+    width: 350px;
+    margin-left: 10px;
+    text-align: left;
+}
+input[type=text], select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+.container_kontakt {
+    margin: auto;
+    width: 400px;
+    border-radius: 7px;
+    background-color: #FAFAFA;
+    padding: 20px;
+    text-align: left;
+}
+button {
+    background-color: #4b4241;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+button:hover {
+    background-color: #00a19c;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+.impressum {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0;
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+.impressum li:not(:last-child):after {
+    content: "|";
+    margin-left: 20px;
+    margin-right: 20px;
+    color: coral;
+}
+.impressum a:hover {
+    color: #ff0000;
+    text-decoration: underline;
+}
+
+#allergene {
+    list-style-type: none;
+    padding: 0;
+    margin: 30px auto;
+}
+
+#allergene li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#link_wunschgericht {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#link_wunschgericht a {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid green; /* Dünner grüner Rahmen */
+    color: green; /* Grüne Schriftfarbe */
+    text-decoration: none;
+    font-size: 16px;
+}
+
+#link_wunschgericht a:hover {
+    background-color: lightgreen; /* Helle grüne Hintergrundfarbe beim Hovern */
+}
+
+
+#success-message{
+    text-align: center;
+    color: green;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+
+#wunschgericht_container form {
+    margin: 10px auto;
+}
+#wunschgericht_container label {
+    display: block;
+    width: 300px;
+    margin: 10px auto;
+}
+#wunschgericht_container input[type="text"],
+#wunschgericht_container input[type="email"],
+#wunschgericht_container textarea {
+    padding: 5px;
+    margin: 10px auto;
+    width: 300px;
+}
+#wunschgericht_container input[type="submit"] {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 300px;
+}
+#wunschgericht_container input[type="submit"]:hover {
+    background-color: #45a049;
+}
+#wunschgericht_container h2 {
+    text-align: center;
+    margin: 20px auto;
+}
+

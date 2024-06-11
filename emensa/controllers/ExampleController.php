@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/emensa/models/kategorie.php');
+require_once __DIR__ . '/../models/kategorie.php';
 
 
 class ExampleController
@@ -24,7 +24,7 @@ class ExampleController
         $link = mysqli_connect(
             "localhost",   // Host der Datenbank
             "root",        // Benutzername zur Anmeldung
-            "...",         // Passwort
+            "emiliebff",         // Passwort
             "emensawerbeseite" // Auswahl der Datenbanken (bzw. des Schemas)
         );
 
@@ -68,6 +68,7 @@ class ExampleController
         return view('examples.m4_7b_kategorie', ['kategorien' => $kategorien]);
     }
 
+
     public function m4_7c_gerichte()
     {
         // Verbindung zur Datenbank herstellen
@@ -75,14 +76,17 @@ class ExampleController
 
         // Query zum Abrufen der Gerichte mit internem Preis über 2€ ausführen
         $result = mysqli_query($link, "SELECT name, preis_intern FROM emensawerbeseite.gericht 
-                          WHERE preis_intern > 2 ORDER BY name DESC");
+                      WHERE preis_intern > 2 ORDER BY name DESC");
 
         // Array zum Speichern der Gerichte initialisieren
         $gerichte = [];
 
         // Gerichte aus dem Ergebnis holen und in das Array speichern
         while ($row = mysqli_fetch_assoc($result)) {
-            $gerichte[] = $row;
+            // Nur Gerichte mit einem Namen hinzufügen
+            if (!empty($row['name'])) {
+                $gerichte[] = $row;
+            }
         }
 
         // Wenn keine Gerichte gefunden wurden, setzen Sie eine entsprechende Nachricht
@@ -94,6 +98,8 @@ class ExampleController
         // Daten an die Blade-View übergeben und die View rendern
         return view('examples.m4_7c_gerichte', ['gerichte' => $gerichte, 'message' => $message]);
     }
+
+
 
     public function m4_7d_layout()
     {

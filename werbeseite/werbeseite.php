@@ -21,7 +21,6 @@ $numberOfNewsletterSignups = (file_exists($newsletterFile)) ? count(file($newsle
 
 
 # Newsletteranmeldung
-#hi rabia
 $error = ""; // Variable für Fehlermeldung
 
 // Funktion zur Überprüfung der E-Mail-Adresse
