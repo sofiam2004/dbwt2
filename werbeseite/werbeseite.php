@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Funktion zur Überprüfung des CSRF-Tokens
 //"Same-Origin-Policy", die sicherstellt, dass eine Webanwendung nur Anfragen an ihre eigene Domäne stellen kann und Anfragen von externen Quellen verhindert.
-//Cross-Site Request Forgery
+//Cross-Site Request Forger
 function verifyCsrfToken($token) {
     return $token === $_SESSION['csrf_token'];
 }
