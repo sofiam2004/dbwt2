@@ -1,0 +1,75 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection("content"); ?>
+
+ <h2>Wunschgericht nennen</h2>
+ <form action="/wunschgericht" method="post">
+ <label for="gericht_name">Name des Gerichts:</label>
+ <input type="text" id="gericht_name" name="gericht_name" required>
+
+ <label for="beschreibung">Beschreibung:</label>
+ <textarea id="beschreibung" name="beschreibung" rows="4" cols="50"></textarea>
+
+ <label for="ersteller_name">Dein Name:</label>
+ <input type="text" id="ersteller_name" name="ersteller_name">
+
+ <label for="email">Deine E-Mail:</label>
+ <input type="email" id="email" name="email">
+
+ <input type="submit" value="Wunsch abschicken">
+ </form>
+
+ <?php if($sucess): ?>
+ <div id="success-message">
+ Vielen Dank! Dein Wunschgericht wurde gemeldet.
+ </div>
+ <?php endif; ?>
+
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection("cssextra"); ?>
+ <style>
+
+ #success-message{
+ text-align: center;
+ color: green;
+ font-size: 18px;
+ margin-bottom: 20px;
+ }
+ form {
+ max-width: 300px;
+ margin: 0 auto;
+ }
+ label {
+ display: block;
+ margin-bottom: 5px;
+ }
+ input[type="text"],
+ input[type="email"],
+ textarea {
+ width: 100%;
+ padding: 5px;
+ margin-bottom: 10px;
+ }
+ input[type="submit"] {
+ width: 100%;
+ padding: 10px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+ }
+ input[type="submit"]:hover {
+ background-color: #45a049;
+ }
+ h2 {
+ text-align: center;
+ margin-bottom: 20px;
+ }
+
+ </style>
+<?php $this->stopSection(); ?>
+
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild("layouts.layout"); } ?>

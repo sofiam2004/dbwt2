@@ -13,9 +13,14 @@ return array(
     '/debug'        => 'HomeController@debug',
     '/error'        => 'DemoController@error',
     '/requestdata'   => 'DemoController@requestdata',
+    '/werbeseite' => 'HomeController@displayPage',
+    '/wunschgericht' => 'HomeController@wunschgericht',
 
     // Erstes Beispiel:
     '/m4_6a_queryparameter' => 'ExampleController@m4_6a_queryparameter',
-    '/m4' => 'ExampleController@m4_6a_queryparameter',
+    '/m4_7a_queryparameter' => 'ExampleController@m4_7a_queryparameter',
+    '/m4_7b_kategorie' =>  'ExampleController@m4_7b_kategorie',
+    '/m4_7c_gerichte' =>  'ExampleController@m4_7c_gerichte',
+
 
 );
