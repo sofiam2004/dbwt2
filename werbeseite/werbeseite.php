@@ -60,12 +60,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         saveNewsletterSignup($newsletterData);
         echo "<span class='erfolgreich'>Anmeldung erfolgreich!</span>";
     }
+}
 
+// Funktion zur Überprüfung des CSRF-Tokens
+//"Same-Origin-Policy", die sicherstellt, dass eine Webanwendung nur Anfragen an ihre eigene Domäne stellen kann und Anfragen von externen Quellen verhindert.
+//Cross-Site Request Forger
+function verifyCsrfToken($token) {
+    return $token === $_SESSION['csrf_token'];
+}
+
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // CSRF-Token überprüfen
+    if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
+        $error = "Ungültiges CSRF-Token.";
+    } else {
+        // Überprüfung, ob alle erforderlichen Felder ausgefüllt wurden
+        if (empty($_POST["email"]) || empty($_POST["Vorname"]) || empty($_POST["Nachname"])) {
+            $error = "Bitte füllen Sie alle erforderlichen Felder aus.";
+        } elseif (!isset($_POST["datenschutz"])) {
+            $error = "Bitte stimmen Sie den Datenschutzbestimmungen zu.";
+        } elseif (!isValidEmail($_POST["email"])) {
+            $error = "Die eingegebene E-Mail-Adresse entspricht nicht den Vorgaben.";
+        } else {
+            // Anmeldung erfolgreich
+            $newsletterData = "E-Mail: " . htmlspecialchars($_POST['email']) . ", Anrede: " . htmlspecialchars($_POST['Anrede']) . ", Vorname: " . htmlspecialchars($_POST['Vorname']) . ", Nachname: " . htmlspecialchars($_POST['Nachname']) . ", Sprache Newsletter: " . htmlspecialchars($_POST['Newsletter_bitte_in']) . "\n";
+            saveNewsletterSignup($newsletterData);
+            echo "<span class='erfolgreich'>Anmeldung erfolgreich!</span>";
+        }
+    }
     // Anzeige der Fehlermeldung, falls vorhanden
     if ($error) {
         echo "<span class='error-message'>$error</span>";
     }
 }
+
 
 
 // Verbindung zur Datenbank herstellen

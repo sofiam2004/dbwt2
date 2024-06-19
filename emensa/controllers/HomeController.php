@@ -5,10 +5,31 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/../models/allergen.php');
 /* Datei: controllers/HomeController.php */
 class HomeController
 {
+
+    private function establishConnectionDb()
+    {
+        // Verbindung zur Datenbank herstellen
+        $link = mysqli_connect(
+            "localhost",   // Host der Datenbank
+            "root",        // Benutzername zur Anmeldung
+            "emiliebff",         // Passwort
+            "emensawerbeseite" // Auswahl der Datenbanken (bzw. des Schemas)
+        );
+
+        // Überprüfen, ob die Verbindung erfolgreich hergestellt wurde
+        if (!$link) {
+            die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
+        }
+
+        return $link;
+    }
+
+
     public function index(RequestData $request) {
         return view('home', ['rd' => $request ]);
     }
 
+    // Newsletteranmeldung, Überprüfung, ob Email valid ist
     function isValidEmail($email): bool {
         // Überprüfung auf gültiges E-Mail-Format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -26,14 +47,16 @@ class HomeController
         return true;
     }
 
+    // Speichern der Newsletteranmeldungen in Textdatei
     function saveNewsletterSignup($data): void {
         $file = '../storage/newsletter_anmeldungen.txt';
         file_put_contents($file, $data, FILE_APPEND);
     }
 
+
+    // Formularverarbeitung für die Newsletter-Anmeldung
     function displayPage(): string
     {
-        // Formularverarbeitung für die Newsletter-Anmeldung
         $success = false;
         $errors = [];
 
@@ -52,6 +75,7 @@ class HomeController
             }
         }
 
+        // Statistiken
         // Besucherzähler erhöhen
         $counterFile = '../storage/counter.txt';
         $counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
@@ -90,6 +114,7 @@ class HomeController
         ]);
     }
 
+    // Wunschgerichte
     public function wunschgericht(RequestData $requestData)
     {
         $sucess = false;
