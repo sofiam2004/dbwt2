@@ -5,10 +5,32 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/../models/allergen.php');
 /* Datei: controllers/HomeController.php */
 class HomeController
 {
+
+    private function establishConnectionDb()
+    {
+        // Verbindung zur Datenbank herstellen
+        $link = mysqli_connect(
+            "localhost",   // Host der Datenbank
+            "root",        // Benutzername zur Anmeldung
+            "emiliebff",         // Passwort
+            "emensawerbeseite" // Auswahl der Datenbanken (bzw. des Schemas)
+        );
+
+        // Überprüfen, ob die Verbindung erfolgreich hergestellt wurde
+        if (!$link) {
+            die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
+        }
+
+        return $link;
+    }
+
+
     public function index(RequestData $request) {
         return view('home', ['rd' => $request ]);
     }
 
+
+    // Newsletteranmeldung, Überprüfung, ob Email valid ist
     function isValidEmail($email): bool {
         // Überprüfung auf gültiges E-Mail-Format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -26,14 +48,16 @@ class HomeController
         return true;
     }
 
+    // Speichern der Newsletteranmeldungen in Textdatei
     function saveNewsletterSignup($data): void {
         $file = '../storage/newsletter_anmeldungen.txt';
         file_put_contents($file, $data, FILE_APPEND);
     }
 
+
+    // Formularverarbeitung für die Newsletter-Anmeldung
     function displayPage(): string
     {
-        // Formularverarbeitung für die Newsletter-Anmeldung
         $success = false;
         $errors = [];
 
@@ -52,6 +76,7 @@ class HomeController
             }
         }
 
+        // Statistiken
         // Besucherzähler erhöhen
         $counterFile = '../storage/counter.txt';
         $counter = (file_exists($counterFile)) ? intval(file_get_contents($counterFile)) : 0;
@@ -89,37 +114,49 @@ class HomeController
             'errors' => $errors,
         ]);
     }
-
+// Wunschgerichte
     public function wunschgericht(RequestData $requestData)
     {
+        // Initialisiert eine Variable, die den Erfolg des Vorgangs anzeigt
         $sucess = false;
 
+        // Überprüft, ob die Anfrage eine POST-Anfrage ist und ob die benötigten Felder im POST-Array gesetzt sind
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['gericht_name']) && isset($_POST['beschreibung'])) {
+            // Setzt die Erfolgsvariable auf true
             $sucess = true;
+
             // Verbindung zur Datenbank herstellen
             $conn = connectdb();
 
             // Daten aus dem Formular erhalten
             $gericht_name = $_POST['gericht_name'];
             $beschreibung = $_POST['beschreibung'];
+            // Optional: Name des Erstellers, falls nicht vorhanden wird 'anonym' gesetzt
             $ersteller_name = isset($_POST['ersteller_name']) ? $_POST['ersteller_name'] : 'anonym';
+            // Optional: E-Mail-Adresse, falls nicht vorhanden wird ein leerer String gesetzt
             $email = isset($_POST['email']) ? $_POST['email'] : '';
 
+            // Überprüft, ob der Gerichtname leer ist oder die E-Mail ungültig ist
             if (empty($gericht_name) || !$this->isValidEmail($email)) {
+                // Setzt die Erfolgsvariable auf false
                 $sucess = false;
-            }
-            else {
+            } else {
                 // SQL-Anweisung zum Einfügen der Daten in die Tabelle
-                $sql = "INSERT INTO emensawerbeseite.wunschgerichte (name, beschreibung, ersteller_name, email) VALUES ('$gericht_name', '$beschreibung', '$ersteller_name', '$email')";
+                $sql = "INSERT INTO emensawerbeseite.wunschgerichte (name, beschreibung, ersteller_name, email) 
+                        VALUES ('$gericht_name', '$beschreibung', '$ersteller_name', '$email')";
 
+                // Führt die SQL-Anweisung aus
                 mysqli_query($conn, $sql);
             }
 
+            // Schließt die Datenbankverbindung
             mysqli_close($conn);
         }
 
+        // Gibt die Ansicht 'wunschgericht' zurück und übergibt die Erfolgsvariable
         return view('wunschgericht', [
             'sucess' => $sucess,
         ]);
     }
+
 }

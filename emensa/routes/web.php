@@ -6,6 +6,8 @@
  *     /demo/subpage will not work as expected
  */
 
+
+
 return array(
     '/'             => "HomeController@index",
     "/demo"         => "DemoController@demo",
@@ -16,11 +18,11 @@ return array(
     '/werbeseite' => 'HomeController@displayPage',
     '/wunschgericht' => 'HomeController@wunschgericht',
 
-    // Erstes Beispiel:
+
     '/m4_6a_queryparameter' => 'ExampleController@m4_6a_queryparameter',
     '/m4_7a_queryparameter' => 'ExampleController@m4_7a_queryparameter',
     '/m4_7b_kategorie' =>  'ExampleController@m4_7b_kategorie',
     '/m4_7c_gerichte' =>  'ExampleController@m4_7c_gerichte',
 
-
 );
+
