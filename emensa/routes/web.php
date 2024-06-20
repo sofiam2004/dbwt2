@@ -17,6 +17,7 @@ return array(
     '/wunschgericht'=> 'HomeController@wunschgericht',
     '/anmeldung'    => 'LoginController@showLoginForm',
     '/anmeldung_verifizieren' => 'LoginController@verifyLogin',
+    '/abmeldung' => 'LoginController@logout',
 
 
 

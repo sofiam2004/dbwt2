@@ -2,21 +2,30 @@
 
 @section("content")
     <header class="mt-5">
-        <div class="container_nav">
-            <img src="/img/logo.jpeg" alt="Logo" title="Logo" width="200">
-            <nav>
-                <ul>
-                    <li><a href="#ankündigung">Ankündigung</a></li>
-                    <li><a href="#speisen">Speisen</a></li>
-                    <li><a href="#zahlen">Zahlen</a></li>
-                    <li><a href="#kontakt">Kontakt</a></li>
-                    <li><a href="#wichtig">Wichtig für uns</a></li>
-                </ul>
-            </nav>
+        <div class="header-top">
+            <div class="angemeldet-info">
+                @if(isset($_SESSION['login']) && $_SESSION['login'])
+                    Angemeldet als {{ $_SESSION['name'] }} <a href="/abmeldung">Abmelden</a>
+                @else
+                    <a href="/anmeldung">Einloggen</a>
+                @endif
+            </div>
+            <div class="container_nav">
+                <!---<img src="/img/logo.jpeg" alt="Logo" title="Logo" width="200">//--->
+                <nav>
+                    <ul>
+                        <li><a href="#ankündigung">Ankündigung</a></li>
+                        <li><a href="#speisen">Speisen</a></li>
+                        <li><a href="#zahlen">Zahlen</a></li>
+                        <li><a href="#kontakt">Kontakt</a></li>
+                        <li><a href="#wichtig">Wichtig für uns</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
     <main>
-        <img src="/img/bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
+        <img id="werbebild" src="/img/bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
         <div id="ankündigung">
             <h1>Bald gibt es Essen auch online ;)</h1>
             <p>Liebe Studierende,<br><br>herzlich willkommen auf unserer digitalen Mensa-Plattform!

@@ -25,6 +25,9 @@ class User
 
             // Vergleichen Sie das gehashte Passwort in der Datenbank mit dem eingegebenen Passwort
             if (password_verify($password_with_salt, $user['passwort'])) {
+                $_SESSION['login'] = true;
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['name'] = $user['name'];
                 return true; // Authentifizierung erfolgreich
             }
         }
