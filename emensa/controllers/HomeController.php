@@ -1,6 +1,8 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/../models/gericht.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/../models/kategorie.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/../models/allergen.php');
+
 
 /* Datei: controllers/HomeController.php */
 class HomeController
@@ -114,7 +116,8 @@ class HomeController
             'errors' => $errors,
         ]);
     }
-// Wunschgerichte
+
+    // Wunschgerichte
     public function wunschgericht(RequestData $requestData)
     {
         // Initialisiert eine Variable, die den Erfolg des Vorgangs anzeigt
@@ -160,3 +163,4 @@ class HomeController
     }
 
 }
+
