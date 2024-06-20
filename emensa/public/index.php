@@ -335,3 +335,31 @@ function assert_blade(): void
         exit(1);
     }
 }
+
+
+// Laden der Router-Konfiguration mit absolutem Pfad
+$routes = include(__DIR__ . '/../routes/web.php');
+
+
+// Einfacher Router
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+if (array_key_exists($uri, $routes)) {
+    $controllerAction = $routes[$uri];
+
+    // Extrahiere Controller und Methode
+    list($controllerName, $methodName) = explode('@', $controllerAction);
+
+    // Require des entsprechenden Controllers
+    require_once __DIR__ . '/../controllers/LoginController.php';
+
+
+    // Erstelle Controller-Instanz und rufe Methode auf
+    $controller = new $controllerName();
+    $controller->$methodName();
+} else {
+    // Seite nicht gefunden
+    http_response_code(404);
+    echo "Seite nicht gefunden.";
+}
+
