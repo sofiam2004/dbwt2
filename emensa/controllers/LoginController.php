@@ -16,11 +16,11 @@ class LoginController
     public function showLoginForm($error = '', $success = '')
     {
         // Sicherstellen, dass die Variablen Strings sind
-        $error = is_string($error) ? $error : '';
-        $success = is_string($success) ? $success : '';
+        $error = $_SESSION["error"] ?? '';
+        unset($_SESSION["error"]);
 
         // Verwenden Sie Laravel's View-Rendering mit Variablen
-        return view('login', ['error' => $error, 'success' => $success]);
+        return view('login', ['error' => $error]);
     }
 
     public function verifyLogin()
@@ -30,15 +30,30 @@ class LoginController
             $password = $_POST['password'];
 
             if ($this->user->authenticate($email, $password)) {
-                $success = "Anmeldung erfolgreich!";
-                return $this->showLoginForm('', $success); // Login-Formular mit Erfolgsmeldung anzeigen
+                header('Location: /werbeseite');
+                exit();
             } else {
                 $error = "Falsche E-Mail oder Passwort.";
-                return $this->showLoginForm($error); // Login-Formular mit Fehlermeldung anzeigen
+                $_SESSION["error"] = $error;
+
+                header('Location: /anmeldung');
+                exit();
             }
         } else {
             $error = "Bitte füllen Sie beide Felder aus.";
-            return $this->showLoginForm($error); // Login-Formular mit Fehlermeldung anzeigen
+            $_SESSION["error"] = $error;
+
+            header('Location: /anmeldung');
+            exit();
         }
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        session_regenerate_id();
+
+        header('Location: /werbeseite');
+        exit();
     }
 }

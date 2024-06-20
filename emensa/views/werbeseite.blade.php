@@ -2,6 +2,11 @@
 
 @section("content")
     <header class="mt-5">
+        @if(isset($_SESSION['login']) && $_SESSION['login'])
+            Willkommen {{$_SESSION['name']}} <a href="/abmeldung">Ausloggen</a>
+        @else
+            <a href="anmeldung">Einloggen</a>
+        @endif
         <div class="container_nav">
             <img src="/img/logo.jpeg" alt="Logo" title="Logo" width="200">
             <nav>

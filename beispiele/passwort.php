@@ -34,14 +34,14 @@ if ($conn->connect_error) {
 // Initialwerte für die neuen Felder
 $anzahlfehler = 0;
 $anzahlanmeldungen = 0;
-$letzteanmeldung = NULL; 
-$letzterfehler = NULL;
 $admin = true;
 
 // SQL-Anweisung zum Einfügen des neuen Benutzers vorbereiten
-$stmt = $conn->prepare("INSERT INTO emensawerbeseite.benutzer (name, email, passwort, admin, anzahlfehler, 
-                                       anzahlanmeldungen, letzteanmeldung, letzterfehler) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssiiiss", $name, $email, $hashed_password, $admin, $anzahlfehler, $anzahlanmeldungen, $letzteanmeldung, $letzterfehler);
+$stmt = $conn->prepare("INSERT INTO emensawerbeseite.benutzer (name, email, passwort, admin, anzahlfehler, anzahlanmeldungen) 
+                       VALUES (?, ?, ?, ?, ?, ?)");
+
+// Hier binden wir die Parameter an die SQL-Anweisung
+$stmt->bind_param("ssssii", $name, $email, $hashed_password, $admin, $anzahlfehler, $anzahlanmeldungen);
 
 // SQL-Anweisung ausführen und Ergebnis überprüfen
 if ($stmt->execute()) {
@@ -55,4 +55,3 @@ $stmt->close();
 
 // Verbindung schließen
 $conn->close();
-
