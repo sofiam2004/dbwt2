@@ -1,21 +1,9 @@
 <?php
+// Setzen der Zeitzone auf Mitteleuropäische Zeit (Berlin)
+date_default_timezone_set('Europe/Berlin');
+
 // Administrator-Email
 $email = 'admin@emensa.example';
-
-// Name des Administrators
-$name = 'Administrator';
-
-// Passwort
-$plain_password = 'emensa123456789';
-
-// Salt für die gesamte Anwendung (mindestens 4 Zeichen)
-$salt = 'wxyz'; // Sie können einen längeren und sichereren Salt verwenden
-
-// Kombination aus Passwort und Salt
-$password_with_salt = $plain_password . $salt;
-
-// Hash des Passworts mit Salt
-$hashed_password = password_hash($password_with_salt, PASSWORD_BCRYPT);
 
 // Verbindung zur Datenbank herstellen (bitte Ihre Verbindungsdaten anpassen)
 $servername = "localhost";
@@ -31,27 +19,37 @@ if ($conn->connect_error) {
     die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
-// Initialwerte für die neuen Felder
-$anzahlfehler = 0;
-$anzahlanmeldungen = 0;
-$admin = true;
+// Überprüfen, ob die E-Mail-Adresse bereits existiert und aktuellen Wert von anzahlanmeldungen lesen
+$stmt_check = $conn->prepare("SELECT id, anzahlanmeldungen FROM emensawerbeseite.benutzer WHERE email = ?");
+$stmt_check->bind_param("s", $email);
+$stmt_check->execute();
+$stmt_check->store_result();
 
-// SQL-Anweisung zum Einfügen des neuen Benutzers vorbereiten
-$stmt = $conn->prepare("INSERT INTO emensawerbeseite.benutzer (name, email, passwort, admin, anzahlfehler, anzahlanmeldungen) 
-                       VALUES (?, ?, ?, ?, ?, ?)");
+if ($stmt_check->num_rows > 0) {
+    // Benutzer mit dieser E-Mail-Adresse bereits vorhanden: Inkrementiere anzahlanmeldungen
+    $stmt_check->bind_result($id, $anzahlanmeldungen);
+    $stmt_check->fetch();
 
-// Hier binden wir die Parameter an die SQL-Anweisung
-$stmt->bind_param("ssssii", $name, $email, $hashed_password, $admin, $anzahlfehler, $anzahlanmeldungen);
+    $anzahlanmeldungen++;
 
-// SQL-Anweisung ausführen und Ergebnis überprüfen
-if ($stmt->execute()) {
-    echo "Neuer Administrator-Benutzer erfolgreich angelegt.";
+    // Aktualisiere die Anzahl der Anmeldungen und setze die letzte Anmeldung auf die aktuelle Zeit
+    $stmt_update = $conn->prepare("UPDATE emensawerbeseite.benutzer SET anzahlanmeldungen = ?, letzteanmeldung = NOW() WHERE id = ?");
+    $stmt_update->bind_param("ii", $anzahlanmeldungen, $id);
+
+    if ($stmt_update->execute()) {
+        echo "Anzahlanmeldungen und letzte Anmeldung erfolgreich aktualisiert.";
+    } else {
+        echo "Fehler beim Aktualisieren der Anzahlanmeldungen und der letzten Anmeldung: " . $stmt_update->error;
+    }
+
+    $stmt_update->close();
+
 } else {
-    echo "Fehler: " . $stmt->error;
+    // Benutzer mit dieser E-Mail-Adresse nicht gefunden: Fehlgeschlagene Anmeldung
+    // Hier könnten Sie entsprechende Fehlerbehandlung durchführen oder einen neuen Benutzer hinzufügen
+    echo "Benutzer mit der E-Mail-Adresse nicht gefunden.";
 }
 
-// Statement schließen
-$stmt->close();
-
-// Verbindung schließen
+$stmt_check->close();
 $conn->close();
+

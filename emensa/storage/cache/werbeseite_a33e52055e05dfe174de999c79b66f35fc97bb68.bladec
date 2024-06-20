@@ -2,13 +2,16 @@
 
 <?php $this->startSection("content"); ?>
  <header class="mt-5">
+ <div class="header-top">
+ <div class="angemeldet-info">
  <?php if(isset($_SESSION['login']) && $_SESSION['login']): ?>
- Willkommen <?php echo \htmlentities($_SESSION['name']??'', ENT_QUOTES, 'UTF-8', false); ?> <a href="/abmeldung">Ausloggen</a>
+ Angemeldet als <?php echo \htmlentities($_SESSION['name']??'', ENT_QUOTES, 'UTF-8', false); ?> <a href="/abmeldung">Abmelden</a>
  <?php else: ?>
- <a href="anmeldung">Einloggen</a>
+ <a href="/anmeldung">Einloggen</a>
  <?php endif; ?>
+ </div>
  <div class="container_nav">
- <img src="/img/logo.jpeg" alt="Logo" title="Logo" width="200">
+ <!---<img src="/img/logo.jpeg" alt="Logo" title="Logo" width="200">//--->
  <nav>
  <ul>
  <li><a href="#ankündigung">Ankündigung</a></li>
@@ -19,9 +22,10 @@
  </ul>
  </nav>
  </div>
+ </div>
  </header>
  <main>
- <img src="/img/bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
+ <img id="werbebild" src="/img/bild_werbeseite.jpeg" alt="Beispiel-Bild" title="Beispiel-Bild">
  <div id="ankündigung">
  <h1>Bald gibt es Essen auch online ;)</h1>
  <p>Liebe Studierende,<br><br>herzlich willkommen auf unserer digitalen Mensa-Plattform!

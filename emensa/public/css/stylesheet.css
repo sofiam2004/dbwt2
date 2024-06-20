@@ -32,7 +32,6 @@ nav ul {
     list-style: none;
     letter-spacing: 2px;
     width: 600px;
-    border: 1px solid #ccc;
     margin: auto;
 }
 nav ul li {
@@ -206,3 +205,15 @@ label {
     margin: 20px auto;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.angemeldet-info {
+    margin-right: 20px;
+}
+
+#werbebild{
+    margin-top: 30px;
+}
