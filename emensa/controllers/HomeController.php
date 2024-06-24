@@ -1,30 +1,14 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/../models/gericht.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/../models/kategorie.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/../models/allergen.php');
+require_once(__DIR__ . '/../models/gericht.php');
+require_once(__DIR__ . '/../models/kategorie.php');
+require_once(__DIR__ . '/../models/allergen.php');
+require_once(__DIR__ . '/../models/db_connection.php');
+
 
 
 /* Datei: controllers/HomeController.php */
 class HomeController
 {
-
-    private function establishConnectionDb()
-    {
-        // Verbindung zur Datenbank herstellen
-        $link = mysqli_connect(
-            "localhost",   // Host der Datenbank
-            "root",        // Benutzername zur Anmeldung
-            "emiliebff",         // Passwort
-            "emensawerbeseite" // Auswahl der Datenbanken (bzw. des Schemas)
-        );
-
-        // Überprüfen, ob die Verbindung erfolgreich hergestellt wurde
-        if (!$link) {
-            die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
-        }
-
-        return $link;
-    }
 
 
     public function index(RequestData $request) {

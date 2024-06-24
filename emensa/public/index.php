@@ -1,11 +1,15 @@
 <?php
+
+session_start();
+
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 const VERBOSITY = 0;
 const PUBLIC_DIRNAME = "public";
 const CONFIG_WEBROUTES = "/../routes/web.php"; // like in laravel
 const CONFIG_DB = "/../config/db.php";
 const ROUTER_VERSION = '0.8.2';
-
-session_start();
 
 assert_php_version('8.2.0');
 assert_path();
@@ -30,6 +34,8 @@ use eftec\bladeone\BladeOne;
 
 /* Routing Script for PHP Dev Server */
 $verbosity = VERBOSITY;
+
+
 if (preg_match('/\.(?:css|js|png|jpg|jpeg|gif)$/', $_SERVER["REQUEST_URI"])) {
     return false;
 } else {
@@ -198,6 +204,11 @@ class FrontController
                     <p>Das Routing Config-Array hat " . count($config) . " Einträge.</p>
                     <p><strong>Exception text</strong><br>" . $ex->getMessage() . "</p>");
         }
+        // Hier wird die Log-Nachricht hinzugefügt, wenn die Seite aufgerufen wird
+
+        $log = self::logger();
+        $log->info("Werbeseite wurde aufgerufen: $url");
+
     }
 
     public static function showErrorMessage($text, $severity = 3, $die = true)
@@ -232,9 +243,16 @@ class FrontController
         }
         return glob($path . '*Controller.php');
     }
+
+    public static function  logger(): Logger
+    {
+        $log = new Logger("emensaLog");
+        $log->pushHandler(new StreamHandler('C:\5.103\emensa\storage\logs\emensa.log'));
+        return $log;
+    }
 }
 
-function connectdb()
+/*function connectdb()
 {
     $path_to_config_db = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . CONFIG_DB;
     $config = include $path_to_config_db;
@@ -259,7 +277,7 @@ function connectdb()
     }
 
     return $link;
-}
+}*/
 
 function view($viewname, $viewargs = array())
 {

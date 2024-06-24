@@ -11,12 +11,28 @@ class ComposerStaticInit0a19be8f09bdc5d4e2b07ba9e95a5801
         array (
             'eftec\\bladeone\\' => 15,
         ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'eftec\\bladeone\\' => 
         array (
             0 => __DIR__ . '/..' . '/eftec/bladeone/lib',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
     );
 

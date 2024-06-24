@@ -5,7 +5,8 @@
         <div class="header-top">
             <div class="angemeldet-info">
                 @if(isset($_SESSION['login']) && $_SESSION['login'])
-                    Angemeldet als {{ $_SESSION['name'] }} <a href="/abmeldung">Abmelden</a>
+                    Angemeldet als {{ $_SESSION['name'] }}
+                    <a href="/abmeldung">Abmelden</a>
                 @else
                     <a href="/anmeldung">Einloggen</a>
                 @endif
