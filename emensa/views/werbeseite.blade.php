@@ -8,7 +8,7 @@
                     Angemeldet als {{ $_SESSION['name'] }}
                     <a href="/abmeldung">Abmelden</a>
                 @else
-                    <a href="/anmeldung">Einloggen</a>
+                    <a href="/anmeldung">Anmelden</a>
                 @endif
             </div>
             <div class="container_nav">

@@ -9,7 +9,7 @@
 
  <a href="/abmeldung">Abmelden</a>
  <?php else: ?>
- <a href="/anmeldung">Einloggen</a>
+ <a href="/anmeldung">Anmelden</a>
  <?php endif; ?>
  </div>
  <div class="container_nav">
