@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // Verbindung zur Datenbank herstellen

@@ -10,7 +10,7 @@
  <?php endif; ?>
 
  <form action="/anmeldung_verifizieren" method="post">
- <input type='hidden' name='<?php  echo '_token'; ?>' value='<?php echo $this->csrf_token; ?>'/> <!-- CSRF-Schutz für Laravel -->
+ <input type='hidden' name='<?php  echo '_token'; ?>' value='<?php echo $this->csrf_token; ?>'/><!-- CSRF-Schutz für Laravel -->
  <label for="email">E-Mail:</label>
  <input type="email" id="email" name="email" required>
  <br>
